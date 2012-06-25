@@ -118,7 +118,16 @@ class WeDevs_Settings_API {
 
         // creates our settings in the options table
         foreach ($this->settings_sections as $section) {
-            register_setting( $section['id'], $section['id'] );
+            //register_setting( $section['id'], $section['id']);
+    		
+			// Spout hack
+			$callback = 'callback_register_setting_'.$section['id'];
+			if (function_exists($callback)) {
+				register_setting( $section['id'], $section['id'], $callback);
+			} else {
+				register_setting( $section['id'], $section['id']);
+			}
+			// end Spout hack
         }
     }
 
@@ -133,6 +142,21 @@ class WeDevs_Settings_API {
         $size = isset( $args['size'] ) && !is_null( $args['size'] ) ? $args['size'] : 'regular';
 
         $html = sprintf( '<input type="text" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['section'], $args['id'], $value );
+        $html .= sprintf( '<span class="description"> %s</span>', $args['desc'] );
+
+        echo $html;
+    }
+    
+    /**
+     * Displays a file field for a settings field
+     *
+     * @param array $args settings field args
+     * @author spout
+     */
+    function callback_file( $args ) {
+		$size = isset( $args['size'] ) && !is_null( $args['size'] ) ? $args['size'] : 'regular';
+		
+		$html = sprintf( '<input type="file" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" />', $size, $args['section'], $args['id']);
         $html .= sprintf( '<span class="description"> %s</span>', $args['desc'] );
 
         echo $html;
