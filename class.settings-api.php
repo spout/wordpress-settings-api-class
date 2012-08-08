@@ -299,7 +299,7 @@ class WeDevs_Settings_API {
             <div class="postbox">
                 <?php foreach ($this->settings_sections as $form) { ?>
                     <div id="<?php echo $form['id']; ?>" class="group">
-                        <form method="post" action="options.php">
+                        <form method="post" enctype="multipart/form-data" action="options.php">
 
                             <?php settings_fields( $form['id'] ); ?>
                             <?php do_settings_sections( $form['id'] ); ?>
